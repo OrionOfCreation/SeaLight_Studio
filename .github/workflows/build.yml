@@ -41,6 +41,19 @@ jobs:
           name: ${{ runner.os }}-SeaLight_Studio
           path: dist/*
 
+  sign:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sign executable
+        uses: ricardoapaes/exe-sign@v1
+        with:
+          executable-path: 'artifacts/Windows-SeaLight_Studio/SeaLight_Studio.exe'
+          signed-executable-name: 'SeaLight_Studio.exe'
+          certificate-base64: ${{ secrets.CERTIFICATE_BASE64 }}
+          certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
   release:
     needs: build
     runs-on: ubuntu-latest
