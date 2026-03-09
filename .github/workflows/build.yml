@@ -41,93 +41,93 @@ jobs:
           name: ${{ runner.os }}-SeaLight_Studio
           path: dist/*
 
-  sign:
+  # abandon signing because ricardoapaes may be unsafe
+  # sign:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Download Raw Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: Windows-SeaLight_Studio
+  #         path: raw_input
+
+  #     - name: Sign executable
+  #       uses: ricardoapaes/exe-sign@v1.1.1
+  #       with:
+  #         executable-path: "raw_input/SeaLight_Studio.exe"
+  #         signed-executable-name: "SeaLight_Studio_Signed.exe"
+  #         certificate-base64: ${{ secrets.CERTIFICATE_BASE64 }}
+  #         certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+      # - name: Find signed file
+      #   run: |
+      #     echo "=== Contenu du dossier courant ==="
+      #     ls -R
+      #     echo "=== Recherche du fichier signé ==="
+      #     find . -name "*Signed*" -o -name "*.exe" | head -20
+
+      # - name: Upload Signed Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Windows-SeaLight_Studio-SIGNED 
+      #     path: ./signing-work/SeaLight_Studio_Signed.exe
+      #     retention-days: 1
+
+
+  release:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download Raw Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Windows-SeaLight_Studio
-          path: raw_input
+      - uses: actions/checkout@v6
 
-      - name: Sign executable
-        uses: ricardoapaes/exe-sign@v1.1.1
+      - name: Download all artifacts
+        uses: actions/download-artifact@v7
         with:
-          executable-path: "raw_input/SeaLight_Studio.exe"
-          signed-executable-name: "SeaLight_Studio_Signed.exe"
-          certificate-base64: ${{ secrets.CERTIFICATE_BASE64 }}
-          certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          path: artifacts
 
-      - name: Find signed file
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            Voici les exécutables pour SeaLight_Studio ${{ github.ref_name }}.
+            - Windows : `SeaLight_Studio.exe`
+            - Linux : `SeaLight_Studio`
+          draft: false
+          prerelease: false
+
+      - name: List artifacts content
         run: |
-          echo "=== Contenu du dossier courant ==="
-          ls -R
-          echo "=== Recherche du fichier signé ==="
-          find . -name "*Signed*" -o -name "*.exe" | head -20
+          echo dossier
+          ls -la artifacts/
+          echo ==Linux==
+          ls -la artifacts/Linux-SeaLight_Studio/
+          echo ==Win==
+          ls -la artifacts/Windows-SeaLight_Studio/
 
-      - name: Upload Signed Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Linux binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
-          name: Windows-SeaLight_Studio-SIGNED 
-          path: ./signing-work/SeaLight_Studio_Signed.exe
-          retention-days: 1
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/Linux-SeaLight_Studio/SeaLight_Studio
+          asset_name: SeaLight_Studio_Linux
+          asset_content_type: application/octet-stream
 
-
-  # release:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-
-  #   steps:
-  #     - uses: actions/checkout@v6
-
-  #     - name: Download all artifacts
-  #       uses: actions/download-artifact@v7
-  #       with:
-  #         path: artifacts
-
-  #     - name: Create Release
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         tag_name: ${{ github.ref_name }}
-  #         release_name: Release ${{ github.ref_name }}
-  #         body: |
-  #           Voici les exécutables pour SeaLight_Studio ${{ github.ref_name }}.
-  #           - Windows : `SeaLight_Studio.exe`
-  #           - Linux : `SeaLight_Studio`
-  #         draft: false
-  #         prerelease: false
-
-  #     - name: List artifacts content
-  #       run: |
-  #         echo dossier
-  #         ls -la artifacts/
-  #         echo ==Linux==
-  #         ls -la artifacts/Linux-SeaLight_Studio/
-  #         echo ==Win==
-  #         ls -la artifacts/Windows-SeaLight_Studio/
-
-  #     - name: Upload Linux binary
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: artifacts/Linux-SeaLight_Studio/SeaLight_Studio
-  #         asset_name: SeaLight_Studio_Linux
-  #         asset_content_type: application/octet-stream
-
-  #     - name: Upload Windows binary
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: artifacts/Windows-SeaLight_Studio/SeaLight_Studio.exe
-  #         asset_name: SeaLight_Studio_Windows.exe
-  #         asset_content_type: application/octet-stream
+      - name: Upload Windows binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/Windows-SeaLight_Studio/SeaLight_Studio.exe
+          asset_name: SeaLight_Studio_Windows.exe
+          asset_content_type: application/octet-stream
