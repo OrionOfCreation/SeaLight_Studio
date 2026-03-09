@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Sign executable
-        uses: ricardoapaes/exe-sign@v1.1.1@main
+        uses: ricardoapaes/exe-sign@main
         with:
           executable-path: "artifacts/Windows-SeaLight_Studio/SeaLight_Studio.exe"
           signed-executable-name: "SeaLight_Studio.exe"
