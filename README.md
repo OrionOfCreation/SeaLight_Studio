@@ -3,7 +3,7 @@
 Application d'analyse des données photométriques et colorimétriques pour les feux de navigation maritime conformes aux normes Wheelmark et USCG/ABYC-C5.
 
 [![iso](https://img.shields.io/badge/LA-RACHE-blue.svg "ISO 1664")](https://www.la-rache.com/presentation.html)
-![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 <img src="icon/splash_screen.png">
@@ -53,6 +53,9 @@ L'outil aide à la vérification de la conformité avec les zones réglementaire
 
 ## Installation
 
+Si vous souhaitez juste utiliser l'application une version est disponible dans les [releases](https://github.com/OrionOfCreation/SeaLight_Studio/releases)  
+Si par contre votre souhait est d'utiliser les fichiers sources, les étapes à suivres sont ci-dessous.
+
 ### Prérequis
 
 - Python 3.12.3 ou supérieur
@@ -85,7 +88,7 @@ pip install -r requirements.txt
 
 5. Lancez l'application :
 ```bash
-python main.py
+python src/main.py
 ```
 
 6. Creez une application portable
@@ -99,7 +102,7 @@ python main.py
 ### Lancement rapide
 
 1. **Démarrez l'application** :
-    - Via l'application télécharger dans les release [github](https://github.com/Auguitare/SeaLight_Studio/releases)
+    - Via l'application télécharger dans les [releases github](https://github.com/Auguitare/SeaLight_Studio/releases) (colonne de droite de la page)
     - Via les fichiers sources:
         ```bash
         source .venv/bin/activate
@@ -113,13 +116,17 @@ python main.py
 3. **Configurez les paramètres** (uniquement onglet Photométrie) :
     - Secteur : Hune, Poupe, Bâbord, Tribord ou Vide (sans zone limite tracée)
     - Portée : 1 à 6 miles nautiques
-    - Inclinaison du test  : 0° ou ±25° (±5° ayant les même contrainte qu'à 0°)
+    - Inclinaison du test  : 0° ou ±25°
+        > [!NOTE]  
+        > Les tests à ±5° ont les même contrainte qu'à 0°, choisissez donc 0°.
 
 4. **Tracez le graphique** :
     - Cliquez sur "Tracer le graphique" (ou appuyez sur Entrée)
 
 5. **Ajustez la position de votre graphique**
-    - Utilisez l'entrée "Décalage [°]" pour ajuster la position de votre graphique dans les bornes des secteurs (modifiable via les flèches directionnelles)
+    - Utilisez l'entrée "Décalage [°]" pour ajuster la position de votre graphique dans les bornes des secteurs
+        > [!NOTE]
+        > Le décalage est une valeur chiffré mais est aussi modifiable via les flèches directionnelles: haut/bas pour un pas de 1° et gauche/droite pour un pas précis de 0.2°
 
 6. **Ajustement visuel**
     - Ajustez si besoin le zoom et la position du graphique avec la toolbar en dessous 
@@ -161,7 +168,7 @@ Les points doivent se situer dans la zone correspondant à la couleur du feu.
 - `Ctrl+O`  : Ouvrir un fichier
 - `Ctrl+F`  : Toggle du facteur d'intensité
 - `Ctrl+Tab`: Changer d'onglet
-- `r`: Réinitialisé le graphe
+- `R`: Réinitialiser le graphe
 - `Flèche direction Gauche\Droite` : +/- 0.2° au décalage
 - `Flèche direction Haut\Bas` : +/- 1° au décalage
 - `Ctrl+Q`  : Quittez l'application
@@ -347,11 +354,11 @@ Si vous lancer les code source:
 
 **Solution** :
 ```bash
-pip install customtkinter
+pip install -r requirements.txt
 ```
 ou
 ```bash
-pip install -r requirements.txt
+pip install customtkinter
 ```
 
 ### Erreur lors du chargement du fichier
@@ -370,11 +377,11 @@ pip install -r requirements.txt
 - Vérifiez que vous avez sélectionné un secteur (pas "Vide") et que c'est celui que vous souhaitez
 - Vérifiez que la portée est bien configurée (1-6)
 - Vérifier le décalage de votre graphe
-- Relancez le tracé avec "Tracer le graphique"
+- Retracer le graphe avec "Tracer le graphique"
 
 ### Autres problèmes
 
-N'hesitez pas a rapporter les erreurs que vous n'arrivez pas à résoudre.
+N'hesitez pas a rapporter les erreurs que vous n'arrivez pas à résoudre via les issues github
 
 ## Contribuer
 
@@ -411,4 +418,5 @@ Pour toute question ou problème :
 
 ---
 
-**Note** : Cette application est un outil d'aide à l'analyse. Les résultats doivent être validés par un organisme certifié pour une homologation officielle.
+> [!CAUTION]
+> Cette application est un outil d'aide à l'analyse. Les résultats doivent être validés par un organisme certifié pour une homologation officielle.
