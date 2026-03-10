@@ -43,7 +43,7 @@ class Application(ctk.CTk):
         self._setup_colorimetry_tab()
         self._setup_keybindings()
 
-        # --- 1. Création de la Barre de Menu (Native Tkinter) ---
+        # --- Barre de Menu ---
         self.menu_bar = tk.Menu(self)
         self.config(menu=self.menu_bar)
 
@@ -64,39 +64,30 @@ class Application(ctk.CTk):
         self.menu_affichage = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="Affichage", menu=self.menu_affichage)
 
-        # Variables pour les boutons radio du menu
-        self.theme_var = tk.StringVar(value="System")
-
         self.menu_affichage.add_radiobutton(
             label="Mode Sombre",
-            variable=self.theme_var,
-            value="Dark",
             command=lambda: self.changer_theme("Dark"),
         )
         self.menu_affichage.add_radiobutton(
             label="Mode Clair",
-            variable=self.theme_var,
-            value="Light",
             command=lambda: self.changer_theme("Light"),
         )
         self.menu_affichage.add_radiobutton(
             label="Système",
-            variable=self.theme_var,
-            value="System",
             command=lambda: self.changer_theme("System"),
         )
 
         # -- Menu Aide --
         self.menu_aide = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="Aide", menu=self.menu_aide)
-        self.menu_aide.add_command(label="À propos")
+        self.menu_aide.add_command(label="À propos", command=self.a_propos)
 
     def _setup_window(self):
         """Configure la fenêtre principale"""
         self.title("Analyse des données photométrique des feux de navigation")
         self.geometry("800x600")
 
-        ctk.set_appearance_mode("light")
+        # ctk.set_appearance_mode("light")
         theme_path = orga.resource_path("src/theme.json")
         ctk.set_default_color_theme(theme_path)
 
@@ -474,7 +465,7 @@ class Application(ctk.CTk):
         except SyntaxError:
             tk.messagebox.showwarning(
                 "Avertissement",
-                """Le décalage DOIT être une valeur chiffrée.Vérifier si un caractère ne s'y est pas glissé""",
+                """Le décalage DOIT être une valeur chiffrée. Vérifiez si un caractère ne s'y est pas glissé""",
             )
             val_decalage = 0
 
@@ -500,7 +491,23 @@ class Application(ctk.CTk):
         self.canvas_photo.draw()
 
     def changer_theme(self, new_theme):
+        """
+        Gère le changement de theme de l'application
+
+        Args:
+            new_theme: Le themes choisis.
+        """
         ctk.set_appearance_mode(new_theme)
+
+    def a_propos(self):
+        """
+        Affiche un message d'à propos avec quelques informations
+
+        """
+        tk.messagebox.showinfo(
+            "À propos",
+            "Analyse Photométrique \n\nMantague - Breizelec.\n\nVersion 1.7",
+        )
 
 
 app = Application()
