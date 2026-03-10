@@ -506,7 +506,7 @@ class Application(ctk.CTk):
         """
         tk.messagebox.showinfo(
             "À propos",
-            "Analyse Photométrique \n\nMantague - Breizelec.\n\nVersion 1.7",
+            "Analyse Photométrique \n\nMantague - Breizelec.\n\nVersion 1.8",
         )
 
 
