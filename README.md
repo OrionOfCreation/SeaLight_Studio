@@ -97,16 +97,16 @@ python main.py
 ### Lancement rapide
 
 1. **Démarrez l'application** :
-    - Via les fichiers sources:
-    ```bash
-    source .venv/bin/activate
-    python main.py
-    ```
     - Via l'application télécharger dans les release [github](https://github.com/Auguitare/SeaLight_Studio/releases)
+    - Via les fichiers sources:
+        ```bash
+        source .venv/bin/activate
+        python main.py
+        ```
 
 2. **Choisissez un fichier de données** :
     - Cliquez sur "Choisir un fichier" (Ctrl+O)
-    - Sélectionnez votre fichier CSV ou TXT
+    - Sélectionnez votre fichier (CSV ou TXT)
 
 3. **Configurez les paramètres** (uniquement onglet Photométrie) :
     - Secteur : Hune, Poupe, Bâbord, Tribord ou Vide (sans zone limite tracée)
@@ -116,14 +116,14 @@ python main.py
 4. **Tracez le graphique** :
     - Cliquez sur "Tracer le graphique" (ou appuyez sur Entrée)
 
-5. **Ajustez votre graphique**
+5. **Ajustez la position de votre graphique**
     - Utilisez l'entrée "Décalage [°]" pour ajuster la position de votre graphique dans les bornes des secteurs (modifiable via les flèches directionnelles)
 
-6. **Ajustez le visuel**
+6. **Ajustement visuel**
     - Ajustez si besoin le zoom et la position du graphique avec la toolbar en dessous 
 
 7. **Sauvegardez**
-    - Sauvegardez votre graphique en PNG avec la dernière icone de la toolbar
+    - Sauvegardez votre graphique avec la dernière icone de la toolbar
 
 ### Guide détaillé
 
@@ -157,9 +157,12 @@ Les points doivent se situer dans la zone correspondant à la couleur du feu.
 
 - `Entrée`  : Tracer le graphique de l'onglet actif (marche aussi avec le Keyboard)
 - `Ctrl+O`  : Ouvrir un fichier
+- `Ctrl+F`  : Toggle du facteur d'intensité
 - `Ctrl+Tab`: Changer d'onglet
+- `r`: Réinitialisé le graphe
 - `Flèche direction Gauche\Droite` : +/- 0.2° au décalage
 - `Flèche direction Haut\Bas` : +/- 1° au décalage
+- `Ctrl+Q`  : Quittez l'application
 
 ## Structure du projet
 
@@ -176,6 +179,7 @@ SeaLight_Studio/
 ├──icon/
     ├── icon.ico             # Icône Windows (optionnel)
     ├── icon.png             # Icône UNIX (optionnel)
+    ├── splash_screen.png    # Imagede démarrage
 ├
 ├──rapid_test_file           # fichier pour test et debug
     ├── babord_limit_boundaries.txt
@@ -229,6 +233,9 @@ Calculs des zones de conformité. Fonctions :
 Gestion des fichiers. Fonctions :
 - `choisir_fichier()` : Dialogue de sélection de fichier
 - `read_file()` : Lecture et parsing des données
+
+#### `theme.json`
+fichier esthétique de l'application.
 
 #### `build.yml`
 Gère l'automatisation de la compilation et des releases
@@ -340,6 +347,10 @@ Si vous lancer les code source:
 ```bash
 pip install customtkinter
 ```
+ou
+```bash
+pip install -r requirements.txt
+```
 
 ### Erreur lors du chargement du fichier
 
@@ -347,15 +358,7 @@ pip install customtkinter
 
 **Solution** :
 - Vérifiez que votre fichier contient bien les colonnes : `Angle °`, `cd`, `lux`, `X`, `Y`
-- Vérifiez que le séparateur est un point-virgule (`;`)
-
-### L'icône ne s'affiche pas
-
-**Problème** : Warning "Impossible de charger l'icône"
-
-**Solution** :
-- Placez `icon.ico` (pour windows) et `icon.png` (pour les OS UNIX) dans le même dossier que l'executable.
-- Ce warning n'empêche pas l'application de fonctionner
+- Vérifiez que le séparateur est bien un point-virgule (`;`)
 
 ### Les zones ne s'affichent pas correctement
 
@@ -384,15 +387,15 @@ Les contributions sont les bienvenues !
   - [x] Ajouter flèche de direction pour augmenter le décalage
   - [x] Ctrl+f pour toggle le facteur d'intensité
 - [x] automatisation de PyInstaller (via runner github)
+- [x] ajouter bouton mode clair/sombre
 - [ ] Comparaison entre plusieurs feux
-- [ ] ajouter bouton mode clair/sombre
 - [ ] ~~Mode batch pour analyser plusieurs fichiers~~ => same as juste above
 - [ ] ~~Export des résultats en PDF~~ => export des graphe en PNG
 - [ ] Génération de rapports de conformité
 
 ## Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](/LICENSE) pour plus de détails.
 
 ## Auteur
 
