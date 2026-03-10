@@ -23,6 +23,7 @@ import tab_colo as colo_file
 # Retrieved 2026-03-10, License - CC BY-SA 4.0
 try:
     import pyi_splash
+
     pyi_splash.close()
 except:
     pass
@@ -237,11 +238,14 @@ class Application(ctk.CTk):
             self.fig_photo, master=self.frame_graph_photo
         )
         self.canvas_photo.draw()
-        self.canvas_photo.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
+        # ajout de la toolbar
         toolbar = NavigationToolbar2Tk(self.canvas_photo, self.frame_graph_photo)
         toolbar.update()
+
+        # gestion de la taille des élément du canva
         toolbar.pack(side=tk.BOTTOM, fill=tk.X)
+        self.canvas_photo.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def _setup_colorimetry_tab(self):
         """Configure l'onglet colorimétrie"""
