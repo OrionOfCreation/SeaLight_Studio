@@ -237,7 +237,6 @@ class Application(ctk.CTk):
         self.canvas_photo = FigureCanvasTkAgg(
             self.fig_photo, master=self.frame_graph_photo
         )
-        self.canvas_photo.draw()
 
         # ajout de la toolbar
         toolbar = NavigationToolbar2Tk(self.canvas_photo, self.frame_graph_photo)
@@ -246,6 +245,9 @@ class Application(ctk.CTk):
         # gestion de la taille des élément du canva
         toolbar.pack(side=tk.BOTTOM, fill=tk.X)
         self.canvas_photo.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+        self.fig_photo.tight_layout()
+        self.canvas_photo.draw()
 
     def _setup_colorimetry_tab(self):
         """Configure l'onglet colorimétrie"""
@@ -299,12 +301,16 @@ class Application(ctk.CTk):
         self.canvas_color = FigureCanvasTkAgg(
             self.fig_color, master=self.frame_graph_color
         )
-        self.canvas_color.draw()
-        self.canvas_color.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
+        # ajout toolbar
         toolbar = NavigationToolbar2Tk(self.canvas_color, self.frame_graph_color)
         toolbar.update()
+
+        self.canvas_color.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         toolbar.pack(side=tk.BOTTOM, fill=tk.X)
+
+        self.fig_photo.tight_layout()
+        self.canvas_color.draw()
 
     def _setup_keybindings(self):
         """Configure les raccourcis clavier"""
@@ -360,6 +366,8 @@ class Application(ctk.CTk):
             self.ax_photo.get_legend().remove()
             self.intensity_factor = None
         self.trace_intensity_factor()
+
+        self.fig_photo.tight_layout()
         self.canvas_photo.draw()
 
     def trace_color(self):
@@ -373,6 +381,8 @@ class Application(ctk.CTk):
         self.data = orga.read_file(self.file_chosen)
         colo_file.trace_graph(self.data, self.ax_color)
         colo_file.trace_limit(self.ax_color)
+
+        self.fig_photo.tight_layout()
         self.canvas_color.draw()
 
     def trace_intensity_factor(self):
