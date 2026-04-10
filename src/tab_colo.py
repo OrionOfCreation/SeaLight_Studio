@@ -61,11 +61,18 @@ def trace_limit(ax):
     ax.plot(zone_yellow["X"], zone_yellow["Y"], color="y", linestyle="--", alpha=0.5)
     ax.fill(zone_yellow["X"], zone_yellow["Y"], color="y", alpha=0.2)
 
+    zone_blue = {
+        "X": [0.136, 0.218, 0.185, 0.102, 0.136],
+        "Y": [0.040, 0.142, 0.175, 0.105, 0.040],
+    }
+    ax.plot(zone_blue["X"], zone_blue["Y"], color="b", linestyle="--", alpha=0.5)
+    ax.fill(zone_blue["X"], zone_blue["Y"], color="b", alpha=0.2)
+
     ax.set_title("Diagramme chromatique")
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_xlim([0, 0.8])
-    ax.set_ylim([0.2, 0.8])
+    ax.set_ylim([0, 0.8])
     ax.minorticks_on()
     ax.grid(which="major", alpha=0.7)
     ax.grid(which="minor", linestyle="--", linewidth=0.5, alpha=0.4)
