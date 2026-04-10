@@ -49,7 +49,7 @@ def trace_limit(ax):
 
     zone_red = {
         "X": [0.68, 0.66, 0.721, 0.735, 0.68],
-        "Y": [0.32, 0.32, 0.265, 0.259, 0.32],
+        "Y": [0.32, 0.32, 0.259, 0.265, 0.32],
     }
     ax.plot(zone_red["X"], zone_red["Y"], color="r", linestyle="--", alpha=0.5)
     ax.fill(zone_red["X"], zone_red["Y"], color="r", alpha=0.2)
