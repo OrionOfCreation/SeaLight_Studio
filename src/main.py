@@ -31,7 +31,7 @@ except:
 
 class Application(ctk.CTk):
     """
-    Classe principale de l'application d'analyse des données photométriques.
+    Classe principale de l'application.\n
     Gère l'interface utilisateur, le chargement des fichiers et l'affichage des graphiques.
     """
 
@@ -135,7 +135,7 @@ class Application(ctk.CTk):
 
         # Variable de la page
         self.var_secteur = ctk.StringVar(value="Vide")
-        self.var_range = ctk.StringVar(value="2")
+        self.var_range = ctk.StringVar(value="3")
         self.var_angle = ctk.IntVar(value=0)
         self.var_decalage = ctk.StringVar(value="0.0")
         self.var_intensity_factor = ctk.BooleanVar(value=False)
