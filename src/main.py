@@ -208,6 +208,14 @@ class Application(ctk.CTk):
         rb_0.grid(row=0, column=1, padx=10, pady=5, sticky="w")
         rb_25.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
+        #live update button
+        self.button_live = ctk.CTkButton(
+            tab_photo,
+            text="▶ Live",
+            width=80,
+        )
+        self.button_live.grid(row=1, column=1, padx=100, pady=5, sticky="w")
+
         # Bouton de choix de fichier
         button_fichier = ctk.CTkButton(
             tab_photo, text="Choisir un fichier", command=self.file
