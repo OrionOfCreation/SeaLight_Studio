@@ -28,6 +28,36 @@ try:
 except:
     pass
 
+_GRAPH_THEMES = {
+    "dark": {
+        "bg":     "#0D1B2A",
+        "axes":   "#162032",
+        "text":   "#CAD8E8",
+        "spine":  "#1E3A5F",
+        "grid":   "#1E3A5F",
+    },
+    "light": {
+        "bg":     "#F0F4F8",
+        "axes":   "#FFFFFF",
+        "text":   "#1A2B3C",
+        "spine":  "#C8D8E8",
+        "grid":   "#C8D8E8",
+    },
+}
+
+def _apply_ax_theme(fig, ax, theme_key):
+    """Applique un thème clair/sombre à une figure et son axe matplotlib."""
+    t = _GRAPH_THEMES[theme_key]
+    fig.set_facecolor(t["bg"])
+    ax.set_facecolor(t["axes"])
+    ax.tick_params(colors=t["text"])
+    ax.xaxis.label.set_color(t["text"])
+    ax.yaxis.label.set_color(t["text"])
+    ax.title.set_color(t["text"])
+    for spine in ax.spines.values():
+        spine.set_edgecolor(t["spine"])
+    ax.grid(color=t["grid"])
+
 
 class Application(ctk.CTk):
     """
@@ -366,6 +396,8 @@ class Application(ctk.CTk):
             self.intensity_factor = None
         self.trace_intensity_factor()
 
+        _apply_ax_theme(self.fig_photo, self.ax_photo, self._current_graph_theme()) # nouveau thème avant de tracer
+
         self.fig_photo.tight_layout()
         self.canvas_photo.draw()
 
@@ -380,6 +412,8 @@ class Application(ctk.CTk):
         self.data = orga.read_file(self.file_chosen)
         colo_file.trace_graph(self.data, self.ax_color)
         colo_file.trace_limit(self.ax_color)
+
+        _apply_ax_theme(self.fig_photo, self.ax_photo, self._current_graph_theme()) # nouveau thème avant de tracer
 
         self.fig_photo.tight_layout()
         self.canvas_color.draw()
@@ -527,6 +561,26 @@ class Application(ctk.CTk):
             new_theme: Le themes choisis.
         """
         ctk.set_appearance_mode(new_theme)
+        self.after(50, self._refresh_graph_theme) # Petit délais d'affichage
+
+    def _current_graph_theme(self):
+        """Retourne 'dark' ou 'light' selon le thème CTk actif."""
+        mode = ctk.get_appearance_mode().lower()
+        if mode == "system":
+            import darkdetect
+            try:
+                return "dark" if darkdetect.isDark() else "light"
+            except Exception:
+                return "light"
+        return "dark" if mode == "dark" else "light"
+
+    def _refresh_graph_theme(self):
+        """Applique le thème courant aux deux figures matplotlib et redessine."""
+        key = self._current_graph_theme()
+        _apply_ax_theme(self.fig_photo, self.ax_photo, key)
+        _apply_ax_theme(self.fig_color, self.ax_color, key)
+        self.canvas_photo.draw()
+        self.canvas_color.draw()
 
     def a_propos(self):
         """
