@@ -34,12 +34,12 @@ def trace_graph(data, ax, decalage, previous_line=None):
         val_decalage = eval(decalage.get())
     except NameError:
         tk.messagebox.showwarning(
-            "Avertissement", "Le décalage DOIT être une valeur chiffrée"
+            "Avertissement Wrong value", "Le décalage DOIT être une valeur chiffrée"
         )
         val_decalage = 0
     except SyntaxError:
         tk.messagebox.showwarning(
-            "Avertissement",
+            "Avertissement WRONG VALUE",
             """Le décalage DOIT être une valeur chiffrée\n
  Vérifier si un caractère ne s'y est pas glissé""",
         )
@@ -192,7 +192,7 @@ def trace_factor(ax, data, secteur):
 
     else:
         tk.messagebox.showwarning(
-            "Avertissement", "Aucune valeur de courbe dans le secteur"
+            "Avertissement: Facteur d'intensité", "Aucune valeur de courbe dans le secteur\nAucun facteur tracé"
         )
         factor_point = ax.scatter(x=0, y=0, c="w", label="pas dans le secteur")
         factor_graph.append(factor_point)

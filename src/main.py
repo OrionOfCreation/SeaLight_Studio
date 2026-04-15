@@ -334,7 +334,7 @@ class Application(ctk.CTk):
         """
         if not self.file_chosen:
             tk.messagebox.showwarning(
-                "Avertissement", "Veuillez d'abord choisir un fichier à ouvrir."
+                "Avertissement: No File", "Veuillez d'abord choisir un fichier à ouvrir."
             )
             return False
         return True
@@ -394,7 +394,7 @@ class Application(ctk.CTk):
                 if self.var_secteur.get() == "Vide":
                     self.checkbox_intensity_factor.deselect()
                     tk.messagebox.showwarning(
-                        "Avertissement",
+                        "Avertissement: No sector",
                         "Veuillez d'abord choisir un secteur pour caculer le facteur d'intensité.",
                     )
                 else:
@@ -417,7 +417,7 @@ class Application(ctk.CTk):
         else:
             self.checkbox_intensity_factor.deselect()
             tk.messagebox.showwarning(
-                "Avertissement",
+                "Avertissement: No graph",
                 "Veuillez d'abord tracer un graphe.",
             )
 
@@ -481,12 +481,12 @@ class Application(ctk.CTk):
             val_decalage = eval(self.var_decalage.get())
         except NameError:
             tk.messagebox.showwarning(
-                "Avertissement", "Le décalade doit être une valeur chiffrée"
+                "Avertissement: Wrong value", "Le décalade doit être une valeur chiffrée"
             )
             val_decalage = 0
         except SyntaxError:
             tk.messagebox.showwarning(
-                "Avertissement",
+                "Avertissement WRONG VALUE",
                 """Le décalage DOIT être une valeur chiffrée. Vérifiez si un caractère ne s'y est pas glissé""",
             )
             val_decalage = 0

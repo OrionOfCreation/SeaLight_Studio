@@ -82,7 +82,7 @@ class Application(ctk.CTk):
         """
         if not self.fichier_selectionne:
             tk.messagebox.showwarning(
-                "Avertissement", "Veuillez d'abord choisir un fichier à ouvrir."
+                "Avertissement: no file", "Veuillez d'abord choisir un fichier à ouvrir."
             )
             return None
         
