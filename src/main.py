@@ -172,6 +172,7 @@ class Application(ctk.CTk):
         self.var_secteur = ctk.StringVar(value="Vide")
         self.var_range = ctk.StringVar(value="3")
         self.var_angle = ctk.IntVar(value=0)
+        self.var_boatType = ctk.StringVar(value="motor")
         self.var_decalage = ctk.StringVar(value="0.0")
         self.var_intensity_factor = ctk.BooleanVar(value=False)
 
@@ -187,6 +188,7 @@ class Application(ctk.CTk):
                 "Tribord",
                 "180",
                 "360",
+                "Vertical",
             ],
             variable=self.var_secteur,
         )
@@ -211,7 +213,17 @@ class Application(ctk.CTk):
             tab_photo, text="+/-25°", variable=self.var_angle, value=25
         )
         rb_0.grid(row=2, column=1, padx=10, pady=5, sticky="w")
-        rb_25.grid(row=2, column=1, padx=100, pady=5, sticky="w")
+        rb_25.grid(row=2, column=1, padx=150, pady=5, sticky="w")
+
+        # Radio bouton de secteurs verticaux
+        rb_motor = ctk.CTkRadioButton(
+            tab_photo, text="Motorboat", variable=self.var_boatType, value=motor
+        )
+        rb_sail = ctk.CTkRadioButton(
+            tab_photo, text="Sailboat", variable=self.var_boatType, value=sail
+        )
+        rb_motor.grid(row=1, column=1, padx=10, pady=5, sticky="w")
+        rb_sail.grid(row=1, column=1, padx=150, pady=5, sticky="w")
 
         # Bouton de choix de fichier
         button_fichier = ctk.CTkButton(
