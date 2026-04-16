@@ -40,8 +40,8 @@ _GRAPH_THEMES = {
         "bg":     "#F0F4F8",
         "axes":   "#FFFFFF",
         "text":   "#1A2B3C",
-        "spine":  "#C8D8E8",
-        "grid":   "#C8D8E8",
+        "spine":  "#879AA8",
+        "grid":   "#879AA8",
     },
 }
 
@@ -82,6 +82,11 @@ class Application(ctk.CTk):
         self._setup_photometry_tab()
         self._setup_colorimetry_tab()
         self._setup_keybindings()
+
+        # Live update
+        self._live_active = False
+        self._live_job = None
+
 
         # --- Barre de Menu ---
         self.menu_bar = tk.Menu(self)
@@ -159,9 +164,9 @@ class Application(ctk.CTk):
         tab_photo.grid_rowconfigure(1, weight=0)
         tab_photo.grid_rowconfigure(2, weight=0)
         tab_photo.grid_rowconfigure(3, weight=1)
-        tab_photo.grid_columnconfigure(0, weight=0)
-        tab_photo.grid_columnconfigure(1, weight=1)
-        tab_photo.grid_columnconfigure(2, weight=0)
+        tab_photo.grid_columnconfigure(0, weight=1)
+        tab_photo.grid_columnconfigure(1, weight=3)
+        tab_photo.grid_columnconfigure(2, weight=1)
 
         # Variable de la page
         self.var_secteur = ctk.StringVar(value="Vide")
@@ -185,18 +190,18 @@ class Application(ctk.CTk):
             ],
             variable=self.var_secteur,
         )
-        secteur_menu.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        secteur_menu.grid(row=1, column=0, padx=(10,10), pady=5, sticky="w")
 
         # Puissance du feux
         range_label = ctk.CTkLabel(tab_photo, text="Range [NM] :")
-        range_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        range_label.grid(row=2, column=0, padx=10, pady=5, sticky="w")
         range_menu = ctk.CTkOptionMenu(
             tab_photo,
             values=["1", "2", "3", "4", "5", "6"],
             variable=self.var_range,
             width=50,
         )
-        range_menu.grid(row=1, column=0, padx=100, pady=5, sticky="w")
+        range_menu.grid(row=2, column=0, padx=(100,10), pady=5, sticky="w")
 
         # Radio bouton d'angle
         rb_0 = ctk.CTkRadioButton(
@@ -205,27 +210,19 @@ class Application(ctk.CTk):
         rb_25 = ctk.CTkRadioButton(
             tab_photo, text="+/-25°", variable=self.var_angle, value=25
         )
-        rb_0.grid(row=0, column=1, padx=10, pady=5, sticky="w")
-        rb_25.grid(row=1, column=1, padx=10, pady=5, sticky="w")
-
-        #live update button
-        self.button_live = ctk.CTkButton(
-            tab_photo,
-            text="▶ Live",
-            width=80,
-        )
-        self.button_live.grid(row=1, column=1, padx=100, pady=5, sticky="w")
+        rb_0.grid(row=2, column=1, padx=10, pady=5, sticky="w")
+        rb_25.grid(row=2, column=1, padx=100, pady=5, sticky="w")
 
         # Bouton de choix de fichier
         button_fichier = ctk.CTkButton(
             tab_photo, text="Choisir un fichier", command=self.file
         )
-        button_fichier.grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        button_fichier.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         self.label_fichier_photo = ctk.CTkLabel(
             tab_photo, text="Aucun fichier sélectionné"
         )
         self.label_fichier_photo.grid(
-            row=2, column=1, columnspan=2, padx=(10, 10), pady=5, sticky="w"
+            row=0, column=1, columnspan=2, padx=(0,10), pady=5, sticky="w"
         )
 
         # Entrée de decalage
@@ -251,7 +248,16 @@ class Application(ctk.CTk):
         button_trace_photo = ctk.CTkButton(
             tab_photo, text="Tracer le graphique", command=self.trace_photo
         )
-        button_trace_photo.grid(row=2, column=2, padx=10, pady=5, sticky="e")
+        button_trace_photo.grid(row=2, column=2, padx=(100,10), pady=5, sticky="e")
+
+        #live update button
+        self.button_live = ctk.CTkButton(
+            tab_photo,
+            text="▶ Live",
+            width=80,
+            command=self._toggle_live_update,
+        )
+        self.button_live.grid(row=2, column=2, padx=(10,180), pady=5, sticky="e")
 
         # == GRAPHIQUE PHOTOMÉTRIE ==
         self.frame_graph_photo = ctk.CTkFrame(tab_photo)
@@ -590,6 +596,29 @@ class Application(ctk.CTk):
         self.canvas_photo.draw()
         self.canvas_color.draw()
 
+    def _toggle_live_update(self):
+        """Active ou désactive la mise à jour automatique toutes les secondes."""
+        if self._live_active:
+            # ── Arrêt ──
+            self._live_active = False
+            if self._live_job:
+                self.after_cancel(self._live_job)
+                self._live_job = None
+            self.button_live.configure(text="▶ Live")
+        else:
+            # ── Démarrage ──
+            if not self._file_loaded():
+                return
+            self._live_active = True
+            self.button_live.configure(text="⏹ Stop")
+            self._live_tick()
+
+    def _live_tick(self):
+        """Appelé toutes les secondes tant que le mode live est actif."""
+        if self._live_active:
+            self.trace_photo()
+            self._live_job = self.after(1000, self._live_tick)
+
     def a_propos(self):
         """
         Affiche un message d'à propos avec quelques informations
@@ -597,7 +626,7 @@ class Application(ctk.CTk):
         """
         tk.messagebox.showinfo(
             "À propos",
-            "Analyse Photométrique \n\nMantague - Breizelec.\n\nVersion v2.1",
+            "Analyse Photométrique \n\nMantague - Breizelec.\n\nVersion v2.3",
         )
 
 
