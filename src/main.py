@@ -165,7 +165,7 @@ class Application(ctk.CTk):
         tab_photo.grid_rowconfigure(2, weight=0)
         tab_photo.grid_rowconfigure(3, weight=1)
         tab_photo.grid_columnconfigure(0, weight=1)
-        tab_photo.grid_columnconfigure(1, weight=3)
+        tab_photo.grid_columnconfigure(1, weight=2)
         tab_photo.grid_columnconfigure(2, weight=1)
 
         # Variable de la page
@@ -201,7 +201,7 @@ class Application(ctk.CTk):
             tab_photo,
             values=["1", "2", "3", "4", "5", "6"],
             variable=self.var_range,
-            width=50,
+            width=80,
         )
         range_menu.grid(row=2, column=0, padx=(100,10), pady=5, sticky="w")
 
@@ -220,7 +220,7 @@ class Application(ctk.CTk):
             tab_photo, text="Motorboat", variable=self.var_boat_type, value="motor"
         )
         rb_sail = ctk.CTkRadioButton(
-            tab_photo, text="Sailboat", variable=self.var_boat_type, value="sail"
+            tab_photo, text="Sailboat", variable=self.var_boat_type, value="sail", width=150
         )
         rb_motor.grid(row=1, column=1, padx=10, pady=5, sticky="w")
         rb_sail.grid(row=1, column=1, padx=150, pady=5, sticky="w")
@@ -266,10 +266,10 @@ class Application(ctk.CTk):
         self.button_live = ctk.CTkButton(
             tab_photo,
             text="▶ Live",
-            width=80,
+            width=100,
             command=self._toggle_live_update,
         )
-        self.button_live.grid(row=2, column=2, padx=(10,180), pady=5, sticky="e")
+        self.button_live.grid(row=2, column=2, padx=(10,160), pady=5, sticky="e")
 
         # == GRAPHIQUE PHOTOMÉTRIE ==
         self.frame_graph_photo = ctk.CTkFrame(tab_photo)
