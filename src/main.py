@@ -172,7 +172,7 @@ class Application(ctk.CTk):
         self.var_secteur = ctk.StringVar(value="Vide")
         self.var_range = ctk.StringVar(value="3")
         self.var_angle = ctk.IntVar(value=0)
-        self.var_boatType = ctk.StringVar(value="motor")
+        self.var_boat_type = ctk.StringVar(value="motor")
         self.var_decalage = ctk.StringVar(value="0.0")
         self.var_intensity_factor = ctk.BooleanVar(value=False)
 
@@ -217,10 +217,10 @@ class Application(ctk.CTk):
 
         # Radio bouton de secteurs verticaux
         rb_motor = ctk.CTkRadioButton(
-            tab_photo, text="Motorboat", variable=self.var_boatType, value=motor
+            tab_photo, text="Motorboat", variable=self.var_boat_type, value="motor"
         )
         rb_sail = ctk.CTkRadioButton(
-            tab_photo, text="Sailboat", variable=self.var_boatType, value=sail
+            tab_photo, text="Sailboat", variable=self.var_boat_type, value="sail"
         )
         rb_motor.grid(row=1, column=1, padx=10, pady=5, sticky="w")
         rb_sail.grid(row=1, column=1, padx=150, pady=5, sticky="w")
@@ -413,6 +413,7 @@ class Application(ctk.CTk):
             self.var_secteur.get(),
             int(self.var_range.get()),
             self.var_angle.get(),
+            self.var_boat_type.get(),
             self.current_photo_limits,
         )
         if self.intensity_factor is not None:

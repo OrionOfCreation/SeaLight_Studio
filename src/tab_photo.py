@@ -52,7 +52,7 @@ def trace_graph(data, ax, decalage, previous_line=None):
     return line, val_decalage
 
 
-def trace_limit(ax, secteur, range_val, inclinaison, previous_limits=None):
+def trace_limit(ax, secteur, range_val, inclinaison, boat_type, previous_limits=None):
     """
     Trace les zones limites (zones interdites) sur le graphique de photométrie.
 
@@ -61,6 +61,7 @@ def trace_limit(ax, secteur, range_val, inclinaison, previous_limits=None):
         secteur (str): Nom du secteur ("Hune", "Poupe", "Babord", "Tribord", "Vide").
         range_val (float): Valeur de la portée.
         inclinaison (float): Valeur de l'inclinaison.
+        boat_type (str): indique si le bateau est à moteur ou à voile.
         previous_limits (list, optional): Liste des artistes précédemment tracés à supprimer.
 
     Returns:
@@ -85,6 +86,8 @@ def trace_limit(ax, secteur, range_val, inclinaison, previous_limits=None):
         zone_interdite = z.all_round(range_val, inclinaison)
     elif secteur == "Vide":
         zone_interdite = z.only_value()
+    elif secteur == "Vertical":
+        zone_interdite = z.vertical(range_val, boat_type)
 
     # Tracer les zones
     new_limits = []
@@ -144,6 +147,9 @@ def trace_factor(ax, data, secteur):
         zone_interdite = z.all_round()
     elif secteur == "Vide":
         zone_interdite = z.only_value()
+    elif secteur == "Vertical":
+        zone_interdite = z.vertical()
+
 
     x_factor_l = int(zone_interdite[2]["X"][3])
     x_factor_r = int(zone_interdite[2]["X"][4])

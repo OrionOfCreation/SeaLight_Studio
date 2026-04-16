@@ -9,11 +9,45 @@ types de feux de navigation (Hune, Poupe, Babord, Tribord) selon les normes.
 
 import tkinter as tk
 
+def max_power(light_range, inclinaison):
+    """
+    Calcule la puissance maximale basée sur la portée de la lumière et l'inclinaison,
+
+    Args:
+        light_range (int): La portée de la lumière (1-6).
+        inclinaison (float/int): L'angle d'inclinaison. Si non nul, puissance est divisée par deux.
+
+    Returns:
+        int : valeur maximal de l'intensité
+    """
+
+    max = 0
+    match light_range:
+        # Valeur tirée de la norme USCG/ABYC-C5
+        case 1:
+            max = 1.1
+        case 2:
+            max = 5.4
+        case 3:
+            max = 15
+        case 4:
+            max = 33
+        case 5:
+            max = 65
+        case 6:
+            max = 118
+        case _:
+            tk.messagebox.showwarning("Avertissement: No range", "choisir une portée.")
+            return
+
+    if inclinaison != 0:
+        max *= 0.5  # if not 0°, divide power riquiered by 2
+
+    return max
 
 def intensity_calc(light_range, inclinaison):
     """
-    Calcule la puissance maximale basée sur la portée de la lumière et l'inclinaison,
-    et retourne un dictionnaire de valeurs d'intensité pour trois zones.
+    Retourne un dictionnaire de valeurs d'intensité pour trois zones.
 
     Args:
         light_range (int): La portée de la lumière (1-6).
@@ -23,53 +57,33 @@ def intensity_calc(light_range, inclinaison):
         dict: Un dictionnaire contenant les données
         d'intensité (valeurs Y) pour les zones 1, 2 et 3.
     """
-    max_power = 0
-    match light_range:
-        # Valeur tirée de la norme USCG/ABYC-C5
-        case 1:
-            max_power = 1.1
-        case 2:
-            max_power = 5.4
-        case 3:
-            max_power = 15
-        case 4:
-            max_power = 33
-        case 5:
-            max_power = 65
-        case 6:
-            max_power = 118
-        case _:
-            tk.messagebox.showwarning("Avertissement: No range", "choisir une portée.")
-            return
 
-    if inclinaison != 0:
-        max_power *= 0.5  # if not 0°, divide power riquiered by 2
-
+    max_intesity = max_power(light_range, inclinaison)
     return {
         # define 3 no-go zone
         1: {
             "Y": [  # have to go under 10% of the max power
-                0.1 * max_power,
-                max_power,
-                max_power,
-                0.1 * max_power,
-                0.1 * max_power,
+                0.1 * max_intesity,
+                max_intesity,
+                max_intesity,
+                0.1 * max_intesity,
+                0.1 * max_intesity,
             ]
         },
         2: {
             "Y": [  # may have 5 degrees of half power (e.g. masthead or stern)
                 0,
-                0.5 * max_power,
-                0.5 * max_power,
-                max_power,
-                max_power,
-                0.5 * max_power,
-                0.5 * max_power,
+                0.5 * max_intesity,
+                0.5 * max_intesity,
+                max_intesity,
+                max_intesity,
+                0.5 * max_intesity,
+                0.5 * max_intesity,
                 0,
                 0,
             ]
         },
-        3: {"Y": [max_power, 0.1 * max_power, 0.1 * max_power, max_power, max_power]},
+        3: {"Y": [max_intesity, 0.1 * max_intesity, 0.1 * max_intesity, max_intesity, max_intesity]},
     }
 
 
@@ -217,5 +231,41 @@ def only_value():
     zone[2]["Y"] = [0]
     zone[3]["X"] = [0]
     zone[3]["Y"] = [0]
+
+    return zone
+
+
+def vertical (light_range=1, boat_type="motor"):
+    """
+    Définit les coordonnées pour les zones interdite d'un feu lors du test vertical.
+
+    Args:
+        light_range (int): La portée de la lumière (1-6).
+        boat_type (str): indique le type de bateau (moteur ou voile)
+
+    Returns:
+        dict: Le dictionnaire d'intensité des zones interdites.
+    """
+
+    zone = {1: {}, 2: {}, 3: {}}
+    intensity_max = max_power(light_range,0)
+
+    if boat_type == "motor":
+        zone[1]["Y"] = [0, 0, 0, 0, 0]
+        zone[2]["Y"] = [0, 0.6*intensity_max, 0.6*intensity_max, intensity_max, intensity_max, 0.6*intensity_max, 0.6*intensity_max, 0, 0]
+        zone[3]["Y"] = [0, 0, 0, 0, 0]
+
+        zone[1]["X"] = [0, 0, 0, 0, 0]
+        zone[2]["X"] = [-7.5, -7.5, -5, -5, 5, 5, 7.5, 7.5, -7.5]
+        zone[3]["X"] = [0, 0, 0, 0, 0]
+
+    elif boat_type == "sail":
+        zone[1]["Y"] = [0, 0, 0, 0, 0]
+        zone[2]["Y"] = [0, 0.5*intensity_max, 0.5*intensity_max, intensity_max, intensity_max, 0.5*intensity_max, 0.5*intensity_max, 0, 0]
+        zone[3]["Y"] = [0, 0, 0, 0, 0]
+
+        zone[1]["X"] = [0, 0, 0, 0, 0]
+        zone[2]["X"] = [-25, -25, -5, -5, 5, 5, 25, 25, -25]
+        zone[3]["X"] = [0, 0, 0, 0, 0]
 
     return zone
