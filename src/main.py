@@ -166,7 +166,7 @@ class Application(ctk.CTk):
         tab_photo.grid_rowconfigure(3, weight=1)
         tab_photo.grid_columnconfigure(0, weight=1)
         tab_photo.grid_columnconfigure(1, weight=2)
-        tab_photo.grid_columnconfigure(2, weight=1)
+        tab_photo.grid_columnconfigure(2, weight=0)
 
         # Variable de la page
         self.var_secteur = ctk.StringVar(value="Vide")
@@ -191,8 +191,9 @@ class Application(ctk.CTk):
                 "Vertical",
             ],
             variable=self.var_secteur,
+            anchor = "center",
         )
-        secteur_menu.grid(row=1, column=0, padx=(10,10), pady=5, sticky="w")
+        secteur_menu.grid(row=1, column=0, padx=(10,0), pady=5, sticky="w")
 
         # Puissance du feux
         range_label = ctk.CTkLabel(tab_photo, text="Range [NM] :")
@@ -201,9 +202,9 @@ class Application(ctk.CTk):
             tab_photo,
             values=["1", "2", "3", "4", "5", "6"],
             variable=self.var_range,
-            width=80,
+            width=50,
         )
-        range_menu.grid(row=2, column=0, padx=(100,10), pady=5, sticky="w")
+        range_menu.grid(row=2, column=0, padx=(100,0), pady=5, sticky="w")
 
         # Radio bouton d'angle
         rb_0 = ctk.CTkRadioButton(
@@ -213,7 +214,7 @@ class Application(ctk.CTk):
             tab_photo, text="+/-25°", variable=self.var_angle, value=25
         )
         rb_0.grid(row=2, column=1, padx=10, pady=5, sticky="w")
-        rb_25.grid(row=2, column=1, padx=150, pady=5, sticky="w")
+        rb_25.grid(row=2, column=1, padx=(150,10), pady=5, sticky="w")
 
         # Radio bouton de secteurs verticaux
         rb_motor = ctk.CTkRadioButton(
@@ -223,18 +224,18 @@ class Application(ctk.CTk):
             tab_photo, text="Sailboat", variable=self.var_boat_type, value="sail", width=150
         )
         rb_motor.grid(row=1, column=1, padx=10, pady=5, sticky="w")
-        rb_sail.grid(row=1, column=1, padx=150, pady=5, sticky="w")
+        rb_sail.grid(row=1, column=1, padx=(150,10), pady=5, sticky="w")
 
         # Bouton de choix de fichier
         button_fichier = ctk.CTkButton(
             tab_photo, text="Choisir un fichier", command=self.file
         )
-        button_fichier.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        button_fichier.grid(row=0, column=0, padx=(10,0), pady=5, sticky="w")
         self.label_fichier_photo = ctk.CTkLabel(
             tab_photo, text="Aucun fichier sélectionné"
         )
         self.label_fichier_photo.grid(
-            row=0, column=1, columnspan=2, padx=(0,10), pady=5, sticky="w"
+            row=0, column=1, columnspan=2, padx=(10,10), pady=5, sticky="w"
         )
 
         # Entrée de decalage
@@ -260,13 +261,13 @@ class Application(ctk.CTk):
         button_trace_photo = ctk.CTkButton(
             tab_photo, text="Tracer le graphique", command=self.trace_photo
         )
-        button_trace_photo.grid(row=2, column=2, padx=(100,10), pady=5, sticky="e")
+        button_trace_photo.grid(row=2, column=2, padx=(10,10), pady=5, sticky="e")
 
         #live update button
         self.button_live = ctk.CTkButton(
             tab_photo,
             text="▶ Live",
-            width=100,
+            width=60,
             command=self._toggle_live_update,
         )
         self.button_live.grid(row=2, column=2, padx=(10,160), pady=5, sticky="e")
