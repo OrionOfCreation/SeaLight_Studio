@@ -197,10 +197,6 @@ def trace_factor(ax, data, secteur):
         factor_graph.append(factor_line)
 
     else:
-        tk.messagebox.showwarning(
-            "Avertissement: Facteur d'intensité", "Aucune valeur de courbe dans le secteur\nAucun facteur tracé"
-        )
-        factor_point = ax.scatter(x=0, y=0, c="w", label="pas dans le secteur")
-        factor_graph.append(factor_point)
+        return None
 
     return factor_graph

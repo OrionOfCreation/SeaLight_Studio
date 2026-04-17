@@ -464,7 +464,14 @@ class Application(ctk.CTk):
                         self.intensity_factor = photo_file.trace_factor(
                             self.ax_photo, self.data, self.var_secteur.get()
                         )
-                        self.ax_photo.legend(loc="lower center")
+                        if self.intensity_factor is None:
+                            self.checkbox_intensity_factor.deselect()
+                            tk.messagebox.showwarning(
+                                "Avertissement: Facteur d'intensité",
+                                "Aucune valeur de courbe dans le secteur\nAucun facteur tracé",
+                            )
+                        else:
+                            self.ax_photo.legend(loc="lower center")
             else:
                 if self.intensity_factor is not None:
                     for artist in self.intensity_factor:
