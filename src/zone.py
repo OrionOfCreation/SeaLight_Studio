@@ -129,7 +129,7 @@ def poupe(light_range=1, inclinaison=0):
     return zone
 
 
-def babord(light_range=1, inclinaison=0):
+def tribord(light_range=1, inclinaison=0):
     """
     Définit les coordonnées pour les zones interdite d'un feu bâbord.
 
@@ -150,7 +150,7 @@ def babord(light_range=1, inclinaison=0):
     return zone
 
 
-def tribord(light_range=1, inclinaison=0):
+def babord(light_range=1, inclinaison=0):
     """
     Définit les coordonnées pour les zones interdite d'un feu tribord.
 
