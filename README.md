@@ -142,7 +142,7 @@ python src/main.py
 
 | Paramètre | Description | Valeurs |
 |-----------|-------------|---------|
-| Secteur | Type de feu à analyser | Hune, Poupe, Bâbord, Tribord, Vide, 360°, 180° babord et tribord |
+| Secteur | Type de feu à analyser | Hune, Poupe, Bâbord, Tribord, Vide, 360°, 180°, Vertical |
 | Portée | Distance en miles nautiques | 1, 2, 3, 4, 5, 6 |
 | Inclinaison | Angle d'inclinaison du test | 0°, ±25° |
 | Décalage | Correction angulaire (en degrés) | Valeur décimale |
